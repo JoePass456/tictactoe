@@ -1,0 +1,45 @@
+
+
+h1 {
+    width: 100%;
+    text-align: center;
+    font-size: 700%;
+    /*font-family: Bradley Impact, cursive;*/
+    font-family: 'Long Cang', cursive;
+
+}
+
+.container-fluid {
+    /*background-image: url("../img/board.svg");
+    background-size: cover;*/
+    
+    
+    /*height: 900px;*/
+    width: 900px;
+    /*max-height: 80%;
+    max-width: 80%;8/
+
+    /*overflow: hidden;*/
+    /*background-color: white*/
+}
+
+.container {
+    background-image: url("../img/board.svg");
+    background-size: cover;
+    
+    
+    height: 900px;
+    width: 900px;
+    /*max-height: 80%;
+    max-width: 80%;8/
+
+    /*overflow: hidden;*/
+    /*background-color: white*/
+}
+
+
+.row {
+    width: 900px;
+    height: 300px;
+
+}
