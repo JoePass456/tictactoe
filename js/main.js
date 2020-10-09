@@ -9,7 +9,7 @@ var winCond = [
     [1, 5, 9],
     [3, 5, 7],
 ]
-
+var winState = null;
 var plr1 = [];
 var plr2 = [];
 var row = [];
@@ -28,13 +28,9 @@ var board = document.createElement('div');
 
 async function init() {
 
-
     headCon.setAttribute('class', 'container-fluid');
-    //header.setAttribute('class', 'row');
     heading.textContent = "Tic-Tac-Tofu";
     header.appendChild(heading);
-
-    //await sleep(2500);
 
     main.appendChild(headCon);
     headCon.appendChild(header);
@@ -124,97 +120,94 @@ async function updateState(pressed) {
     if (plr1.includes(pressed) || plr2.includes(pressed)) {
         // retry
         alert('That square has already been played, please choose another!');
-
     } else {
-
-        //  
+        //determine whose turn it is and push to 
         if (turn % 2 == 0) {
             sqr[pressed].setAttribute('src', 'img/x.svg');
-            //await sleep(300);
+            await sleep(300);
             plr1.push(pressed);
             msg = "Player O is up!";
             heading.textContent = msg;
             if (turn >= 4) {
-                checkForWin(plr1, 'X');
+                winState = checkForWin(plr1);
             }
         } else {
             sqr[pressed].setAttribute('src', 'img/o.svg');
-            //await sleep(300);
+            await sleep(300);
             plr2.push(pressed)
             msg = "Player X is up!";
             heading.textContent = msg;
             if (turn >= 4) {
-                checkForWin(plr2, 'O');
+                winState = checkForWin(plr2);
             }
         }
-        turn++;
-        if (turn == 9) {
-            console.log('no winner')
-            congrats('nope', "0");
+        //  check win state
+        if (winState) {
+            congrats(winState);
+            console.log('win', winState, turn)
+        } else if (turn == 8) {
+            congrats(winState);
         } else {
-
-            //await sleep(500);
-
-            //await sleep(2500);
-            //heading.textContent = "Tic-Tac-Tofu";
-            //console.log(turn, plr1, plr2);
+            turn++;
         }
-
     }
 }
 
-function checkForWin(plr, winner) {
-    //alert('Checking for win');
+function checkForWin(plr) {
+    console.log('Checking for win');
     for (let index = 0; index < 8; index++) {
         let inRow = 0;
         for (let i = 0; i < 3; i++) {
             if (plr.includes(winCond[index][i])) {
                 inRow += 1;
                 if (inRow == 3) {
-
-                    congrats(index, winner);
+                    return (index);
                 }
-
             }
         }
     }
 }
 
-async function congrats(cond, winner) {
-    if (winner === '0') {
-        await sleep(750);
+async function congrats(win) {
+    if (win == null) {
+        //await sleep(750);
         heading.textContent = "It's a tie!";
         console.log('no winner 2')
         await sleep(2500);
     } else {
-        await sleep(750);
+        //await sleep(750);
+        let winner;
+        (turn % 2) ? winner = 'O' : winner = 'X';
         let vicMsg = 'Player ' + winner + ' wins!';
+        console.log('winner', winState, turn);
         heading.textContent = vicMsg;
-        let lineThru = "img/win" + cond + ".svg";
+        let lineThru = "img/win" + winState + ".svg";
         line = document.createElement('img');
         for (let x = 1; x < 10; x++) {
             sqr[x].hidden = true;
         }
-        //line.setAttribute('class', 'img-fluid');
         line.setAttribute('src', lineThru)
         board.insertBefore(line, board.childNodes[0]);
         await sleep(2500);
         board.removeChild(line);
     }
+    
+    // re init
     turn = 0;
+    winState = null;
+    plr1 = [];
+    plr2 = [];
+    console.log('turn init', winState, turn);
     for (let x = 1; x < 10; x++) {
         sqr[x].hidden = false;
         sqr[x].setAttribute('src', 'img/square.svg');
     }
-    //document.removeEventListener('click', function());
+
     board.hidden = true;
     heading.textContent = "Prepare to play!";
     await sleep(2000);
     board.hidden = false;
     heading.textContent = "Tic-Tac-Tofu";
-    //document.addEventListener('reset', logReset);
-    plr1 = [];
-    plr2 = [];
 
     msg = "Player X is up!";
 
